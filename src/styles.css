@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .gradient-diagonal-background {
+    @apply bg-gradient-to-br from-[#282D38] via-[#1A1F2C] to-[#11151F];
+  }
+
+  .gradient-diagonal-text {
+    background: linear-gradient(to bottom right, #0cd2ec, #1483fa);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .displayNone{
+    display: none;
+  }
+}
+
+@layer components{
+  .MENU-BTN__BURGER{
+    @apply bg-white w-8 h-0.5 rounded transition-all ease-in-out;
+  }
+
+  .MENU-BTN__BURGER::before,
+  .MENU-BTN__BURGER::after{
+    content: '';
+    position: absolute;
+    width: 1.5rem;
+    height: 0.125rem;
+    background: white;
+  }
+
+  .MENU-BTN__BURGER::before{
+    @apply -translate-y-2 translate-x-2;
+  }
+
+  .MENU-BTN__BURGER::after{
+    @apply translate-y-2 translate-x-2;
+  }
+
+  .MENU-BTN__Open .MENU-BTN__BURGER{
+    background: transparent;
+    @apply -translate-x-2 ease-in-out;
+  }
+
+  .MENU-BTN__Open .MENU-BTN__BURGER::before{
+    @apply rotate-45 translate-y-0 translate-x-2 scale-x-125 duration-200 ease-in-out;
+  }
+
+  .MENU-BTN__Open .MENU-BTN__BURGER::after{
+    @apply -rotate-45 -translate-y-0 translate-x-2 scale-x-125 duration-200 ease-in-out;
+  }
+
+}
+
