@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [isOpen, setIsOpen] = useState(false);
-    const user = false;
+    const user = {};
 
     const updateWidth = () => {
         let width = window.innerWidth;
@@ -109,7 +109,7 @@ const Navbar = () => {
                     className='SIGN-MENU-CONTAINER 
                         flex justify-between gap-x-[10px]'
                 >
-                    {!user ? (
+                    {Object.keys(user).length <= 0 ? (
                         <Link
                             to='login'
                             exact='true'
@@ -118,10 +118,10 @@ const Navbar = () => {
                     text-xs hover:bg-cyan-500 hover:shadow-md 
                       hover:shadow-cyan-500/50 sm:text-sm'
                         >
-                            Sign In
+                            Login
                         </Link>
                     ) : (
-                        ""
+                        user?.name
                     )}
                     {renderHamburgerMenu()}
                 </div>
