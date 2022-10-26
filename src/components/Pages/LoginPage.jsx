@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 // import LoginComponent from "../single-utility/LoginComponent";
 
@@ -7,6 +7,8 @@ const LoginPage = () => {
         email: "",
         password: "",
     });
+
+    const emailRef = useRef();
 
     const onFormSubmit = (event) => {
         event.preventDefault();
@@ -18,7 +20,14 @@ const LoginPage = () => {
             password: /^[#\w@_-]{8,20}$/g,
         };
 
-        // setUserInputData({ ...userInputData, [name]: value });
+        if (
+            inputRegex.email.test(userData.email) &&
+            inputRegex.password.test(userData.password)
+        ) {
+            console.log("Send Userdata");
+        } else {
+            alert("Password or email format is incorrect");
+        }
     };
 
     return (
@@ -37,7 +46,7 @@ const LoginPage = () => {
                         Create new account in few seconds
                     </p>
                     <Link
-                        to='/signin'
+                        to='/login'
                         exact='true'
                         className='SIGN-IN rounded-full border-2 
                                  border-cyan-500 px-3 py-2
@@ -58,24 +67,29 @@ const LoginPage = () => {
                     >
                         <input
                             type='text'
+                            ref={emailRef}
                             placeholder='john.smith_092@gmail.com'
                             name='email'
+                            required='required'
                             className='w-[20vw] rounded-full px-3 py-2 shadow-xl 
                                        focus:outline-none'
                         />
+
                         <input
                             type='password'
                             placeholder='********'
                             name='password'
+                            required='required'
                             className='rounded-full px-3 py-2 shadow-xl
                                        focus:outline-none'
                         />
-                        <input
+                        <button
                             type='submit'
-                            value='Login'
-                            className='w-[6vw] place-self-center rounded-full bg-[#0099BD] py-2 
-                                     text-white shadow-xl hover:bg-[#0099BD]/80'
-                        />
+                            className='w-[6vw] place-self-center rounded-full bg-[#0099BD] 
+                                     py-2 text-white shadow-xl hover:bg-[#0099BD]/80'
+                        >
+                            Login
+                        </button>
                     </form>
                 </div>
             </div>
