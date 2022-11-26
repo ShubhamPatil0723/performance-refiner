@@ -3,12 +3,72 @@ import { Link } from "react-router-dom";
 // import LoginComponent from "../single-utility/LoginComponent";
 
 const LoginPage = () => {
-    const [userInputData, setUserInputData] = useState({
-        email: "",
-        password: "",
+    const [userToken, setUserToken] = useState({
+        isAuth: false,
+        token: "",
+        userId: "",
     });
 
-    const emailRef = useRef();
+    const setAutoLogout = (milliseconds) => {
+        setTimeout(() => {
+            logoutHandler();
+        }, milliseconds);
+    };
+
+    const logoutHandler = () => {
+        setUserToken({ isAuth: false, token: null });
+        localStorage.removeItem("token");
+        localStorage.removeItem("expiryDate");
+        localStorage.removeItem("userId");
+    };
+
+    const errorHandler = () => {
+        this.setState({ error: null });
+    };
+
+    const loginHandler = (authData) => {
+        fetch("backend_URL", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: authData.email,
+                password: authData.password,
+            }),
+        })
+            .then((res) => {
+                if (res.status === 422) {
+                    throw new Error("Validation failed.");
+                }
+                if (res.status !== 200 && res.status !== 201) {
+                    console.log("Error!");
+                    throw new Error("Could not authenticate you!");
+                }
+                return res.json();
+            })
+            .then((resData) => {
+                setUserToken({
+                    isAuth: true,
+                    token: resData.token,
+                    userId: resData.userId,
+                });
+                localStorage.setItem("token", resData.token);
+                localStorage.setItem("userId", resData.userId);
+                const remainingMilliseconds = 60 * 60 * 1000;
+                const expiryDate = new Date(
+                    new Date().getTime() + remainingMilliseconds
+                );
+                localStorage.setItem("expiryDate", expiryDate.toISOString());
+                setAutoLogout(remainingMilliseconds);
+            })
+            .catch((err) => {
+                setUserToken({
+                    isAuth: false,
+                });
+                console.log(err);
+            });
+    };
 
     const onFormSubmit = (event) => {
         event.preventDefault();
@@ -24,7 +84,7 @@ const LoginPage = () => {
             inputRegex.email.test(userData.email) &&
             inputRegex.password.test(userData.password)
         ) {
-            console.log("Send Userdata");
+            loginHandler(userData);
         } else {
             alert("Password or email format is incorrect");
         }
@@ -67,7 +127,6 @@ const LoginPage = () => {
                     >
                         <input
                             type='text'
-                            ref={emailRef}
                             placeholder='john.smith_092@gmail.com'
                             name='email'
                             required='required'
