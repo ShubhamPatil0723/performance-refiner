@@ -1,12 +1,15 @@
-import React from "react";
+import { React, useState } from "react";
 
 // components
 import PieChartCreator from "../single-utility/PieChartCreator";
 import AreaChartCreator from "../single-utility/AreaChartCreator";
+import { FormModal } from "../single-utility/Modals";
 
 const Result = () => {
+    const [uploadFileChoice, setUploadFileChoice] = useState(false);
+
     return (
-        <main>
+        <main className='relative mb-2 flex flex-col'>
             <div
                 className='gradient-diagonal-background flex h-[60vh]
                   items-center justify-center'
@@ -40,13 +43,23 @@ const Result = () => {
                     </div>
                 </div>
             </div>
-
             <div className='AREA-CHART container mx-auto'>
                 <h2 className='my-6 text-xl font-semibold'>
                     Yearly Performance Chart
                 </h2>
                 <AreaChartCreator />
             </div>
+            <button
+                className='my-2 w-48 self-end rounded-full bg-cyan-600 px-3 py-2 text-white'
+                onClick={() => setUploadFileChoice((prevState) => !prevState)}
+            >
+                Generate New Report
+            </button>
+            {uploadFileChoice ? (
+                <FormModal title='Choose Excel file to upload' />
+            ) : (
+                ""
+            )}
         </main>
     );
 };
