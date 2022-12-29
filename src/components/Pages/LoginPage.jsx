@@ -1,13 +1,14 @@
-import { React, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { React, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { postData } from "../../api/fetch";
 // import LoginComponent from "../single-utility/LoginComponent";
 
 const LoginPage = () => {
     const [userToken, setUserToken] = useState({
-        isAuth: false,
         token: "",
         userId: "",
     });
+    const navigate = useNavigate();
 
     const setAutoLogout = (milliseconds) => {
         setTimeout(() => {
@@ -16,27 +17,19 @@ const LoginPage = () => {
     };
 
     const logoutHandler = () => {
-        setUserToken({ isAuth: false, token: null });
+        setUserToken({ token: null });
         localStorage.removeItem("token");
         localStorage.removeItem("expiryDate");
         localStorage.removeItem("userId");
     };
 
-    const errorHandler = () => {
-        this.setState({ error: null });
-    };
-
     const loginHandler = (authData) => {
-        fetch("backend_URL", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: authData.email,
-                password: authData.password,
-            }),
-        })
+        postData(
+            "/login",
+            "POST",
+            { "Content-Type": "application/json" },
+            { email: authData.email, password: authData.password }
+        )
             .then((res) => {
                 if (res.status === 422) {
                     throw new Error("Validation failed.");
@@ -49,7 +42,6 @@ const LoginPage = () => {
             })
             .then((resData) => {
                 setUserToken({
-                    isAuth: true,
                     token: resData.token,
                     userId: resData.userId,
                 });
@@ -61,15 +53,13 @@ const LoginPage = () => {
                 );
                 localStorage.setItem("expiryDate", expiryDate.toISOString());
                 setAutoLogout(remainingMilliseconds);
+                console.log(localStorage.getItem(userToken));
+                navigate("/result");
             })
             .catch((err) => {
-                setUserToken({
-                    isAuth: false,
-                });
                 console.log(err);
             });
     };
-
     const onFormSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
