@@ -8,6 +8,14 @@ export const postData = (url, action, headers, data) => {
     });
 };
 
+export const postFile = (url, action, headers, data) => {
+    return fetch(`${baseURL}${url}`, {
+        method: action,
+        headers,
+        body: data,
+    });
+};
+
 export const getData = (url, action, headers) => {
     return fetch(`${baseURL}${url}`, {
         method: action,
