@@ -6,7 +6,7 @@ import { ReactComponent as LineChart } from "../../assets/LineChart.svg";
 
 const HomePage = () => {
     return (
-        <main className='mb-14'>
+        <div>
             <div
                 className='HERO gradient-diagonal-background relative flex h-[50vh] flex-col 
                            items-center justify-center text-white xl:h-[70vh]'
@@ -109,7 +109,7 @@ const HomePage = () => {
                     </Link>
                 </div>
             </div>
-        </main>
+        </div>
     );
 };
 
