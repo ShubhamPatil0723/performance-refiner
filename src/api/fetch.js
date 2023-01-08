@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:8080/auth";
+const baseURL = "http://localhost:8080";
 
 export const postData = (url, action, headers, data) => {
     return fetch(`${baseURL}${url}`, {
