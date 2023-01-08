@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { React, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postData } from "../../api/fetch";
@@ -5,11 +6,16 @@ import { postData } from "../../api/fetch";
 
 const LoginPage = () => {
     const [userToken, setUserToken] = useState({
-        token: "",
-        userId: "",
+        token: null,
+        userId: null,
     });
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (userToken.token !== null) {
+            navigate("/choose-sub", { state: userToken });
+        }
+    }, [userToken]);
     const setAutoLogout = (milliseconds) => {
         setTimeout(() => {
             logoutHandler();
@@ -41,10 +47,6 @@ const LoginPage = () => {
                 return res.json();
             })
             .then((resData) => {
-                setUserToken({
-                    token: resData.token,
-                    userId: resData.userId,
-                });
                 localStorage.setItem("token", resData.token);
                 localStorage.setItem("userId", resData.userId);
                 const remainingMilliseconds = 60 * 60 * 1000;
@@ -53,7 +55,10 @@ const LoginPage = () => {
                 );
                 localStorage.setItem("expiryDate", expiryDate.toISOString());
                 setAutoLogout(remainingMilliseconds);
-                navigate("/choose-sub", { state: userToken });
+                setUserToken({
+                    token: resData.token,
+                    userId: resData.token,
+                });
             })
             .catch((err) => {
                 console.log(err);
