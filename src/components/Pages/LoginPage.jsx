@@ -25,7 +25,7 @@ const LoginPage = () => {
 
     const loginHandler = (authData) => {
         postData(
-            "/login",
+            "/auth/login",
             "POST",
             { "Content-Type": "application/json" },
             { email: authData.email, password: authData.password }
@@ -53,8 +53,7 @@ const LoginPage = () => {
                 );
                 localStorage.setItem("expiryDate", expiryDate.toISOString());
                 setAutoLogout(remainingMilliseconds);
-                console.log(localStorage.getItem(userToken));
-                navigate("/result");
+                navigate("/choose-sub", { state: userToken });
             })
             .catch((err) => {
                 console.log(err);
