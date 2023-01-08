@@ -1,7 +1,7 @@
 import { React, useRef, useState } from "react";
 import { postFile } from "../../api/fetch";
 
-export const FormModal = ({ title }) => {
+export const FormModal = ({ title, userToken }) => {
     const fileUpload = useRef();
     const [fileToUpload, setFileToUpload] = useState("");
 
@@ -9,9 +9,12 @@ export const FormModal = ({ title }) => {
         const formData = new FormData();
         formData.append("studentResults", fileToUpload);
         postFile(
-            "/post",
+            "/uploadExcel",
             "POST",
-            { "Content-Type": "multipart/form-data" },
+            {
+                "Content-Type": "multipart/form-data",
+                Authorization: "Bearer " + userToken.token,
+            },
             formData
         );
     };
