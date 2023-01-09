@@ -54,5 +54,10 @@
     @apply -rotate-45 -translate-y-0 translate-x-2 scale-x-125 duration-200 ease-in-out;
   }
 
+  .PIECHART__CONTAINER{
+    display: grid;
+    grid-template-columns: 55% 45%;
+    margin-right: 10px;
+  }
 }
 
